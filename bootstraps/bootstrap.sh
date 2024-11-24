@@ -31,7 +31,7 @@ RUNNER_USER="github-runner"
 RUNNER_DIR="/home/$RUNNER_USER/actions-runner"
 
 # Prompt for GitHub repository URL
-read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo): " REPO_URL
+read -p "Enter your GitHub repository URL (e.g., https://github.com/huytd2k/homelab): " REPO_URL
 if [ -z "$REPO_URL" ]; then
   echo "Repository URL is required. Exiting."
   exit 1
