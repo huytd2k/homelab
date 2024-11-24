@@ -13,6 +13,7 @@ export class CodeServer extends Chart {
         {
           image: 'lscr.io/linuxserver/code-server:latest',
           securityContext: {
+            readOnlyRootFilesystem: false,
             ensureNonRoot: false
           },
           ports: [
