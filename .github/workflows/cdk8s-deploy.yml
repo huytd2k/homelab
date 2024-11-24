@@ -46,11 +46,6 @@ jobs:
     if: github.event_name == 'push'  # Only run on push events
     runs-on: self-hosted  # Use self-hosted runner for deployment
     steps:
-      # Step 1: Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Step 2: Download dist artifact
       - name: Download dist artifact
         uses: actions/download-artifact@v3
         with:
@@ -59,6 +54,6 @@ jobs:
       # Step 3: Apply Kubernetes manifests
       - name: Apply manifests to Kubernetes
         run: |
-          kubectl apply -f ./cdk8s/dist/
+          kubectl apply -f .
         env:
           KUBECONFIG: /home/github-runner/.kube/config  # Ensure the kubeconfig path matches your runner's setup
