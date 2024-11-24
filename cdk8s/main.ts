@@ -12,6 +12,9 @@ export class CodeServer extends Chart {
       containers: [
         {
           image: 'lscr.io/linuxserver/code-server:latest',
+          securityContext: {
+            ensureNonRoot: false
+          },
           ports: [
             {
               number: 8080, // Expose container port 8080
