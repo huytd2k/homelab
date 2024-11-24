@@ -18,7 +18,7 @@ export class CodeServer extends Chart {
           },
           ports: [
             {
-              number: 8080, // Expose container port 8080
+              number: 8443, // Expose continer port 8080
             },
           ],
         },
@@ -31,7 +31,7 @@ export class CodeServer extends Chart {
       ports: [
         {
           port: 80,        // Service port
-          targetPort: 8080, // Target container port
+          targetPort: 8443, // Target container port
         },
       ],
       selector: deployment,
