@@ -1,0 +1,60 @@
+name: Build and Deploy cdk8s Chart
+
+on:
+  push:
+    branches:
+      - main  # Runs on push to the main branch
+  pull_request:
+    branches:
+      - main  # Runs on pull requests targeting the main branch
+
+jobs:
+  build:
+    name: Build cdk8s Chart
+    runs-on: self-hosted  # Ensures the job runs on your self-hosted runner
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Use the appropriate Node.js version for your project
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./cd8s  # Adjust if your cdk8s project is in a different directory
+
+      # Step 4: Build cdk8s Chart
+      - name: Build cdk8s Chart
+        run: npm run synth
+        working-directory: ./cd8s
+
+      # Step 5: Upload dist as artifact
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cdk8s-dist
+          path: ./cd8s/dist  # Path to the dist directory
+
+  deploy:
+    name: Deploy cdk8s Chart
+    needs: build
+    if: github.event_name == 'push'  # Only run on push events
+    runs-on: self-hosted
+    steps:
+      # Step 1: Download dist artifact
+      - name: Download dist artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: cdk8s-dist
+
+      # Step 2: Apply Kubernetes manifests
+      - name: Apply manifests to Kubernetes
+        run: |
+          kubectl apply -f ./cd8s/dist/
+        env:
+          KUBECONFIG: /home/github-runner/.kube/config  # Ensure the kubeconfig path matches your runner's setup
