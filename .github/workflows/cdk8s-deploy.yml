@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: Build cdk8s Chart
-    runs-on: self-hosted  # Ensures the job runs on your self-hosted runner
+    runs-on: ubuntu-latest  # Use GitHub-hosted runner for the build
     steps:
       # Step 1: Checkout repository
       - name: Checkout repository
@@ -44,15 +44,19 @@ jobs:
     name: Deploy cdk8s Chart
     needs: build
     if: github.event_name == 'push'  # Only run on push events
-    runs-on: self-hosted
+    runs-on: self-hosted  # Use self-hosted runner for deployment
     steps:
-      # Step 1: Download dist artifact
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Download dist artifact
       - name: Download dist artifact
         uses: actions/download-artifact@v3
         with:
           name: cdk8s-dist
 
-      # Step 2: Apply Kubernetes manifests
+      # Step 3: Apply Kubernetes manifests
       - name: Apply manifests to Kubernetes
         run: |
           kubectl apply -f ./cd8s/dist/
