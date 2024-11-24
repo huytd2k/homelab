@@ -28,7 +28,7 @@ spec:
           value: "/tmp/runner"
         - name: RUNNER_LABELS
           value: "k3s,self-hosted"
-        - name: RUNNER_REPO
+        - name: REPO_URL
           value: "https://github.com/huytd2k/homelab"
         - name: RUNNER_TOKEN
           valueFrom:
