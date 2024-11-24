@@ -54,6 +54,6 @@ jobs:
       # Step 3: Apply Kubernetes manifests
       - name: Apply manifests to Kubernetes
         run: |
-          kubectl apply -f .
+          kubectl apply -f . --prune
         env:
           KUBECONFIG: /home/github-runner/.kube/config  # Ensure the kubeconfig path matches your runner's setup
